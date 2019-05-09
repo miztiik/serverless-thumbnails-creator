@@ -8,7 +8,7 @@
 .. contactauthor:: miztiik@github issues
 """
 
-import boto3
+import os
 import logging
 import thumbnail_creator
 
@@ -40,6 +40,11 @@ def lambda_handler(event, context):
         resp = {'status': False, "error_message" : 'No Records found in Event' }
         return resp
 
+    des_bucket = os.getenv("DESTINATION_BUCKET")
+    if not des_bucket:
+        resp = {'status': False, "error_message" : 'No destination S3 bucket provided' }
+        return resp
+
     for r in event.get('Records'):
         # Lets skip the records that are Put/Object Create events
         if not ( ( r.get('eventName') == "ObjectCreated:Put" )  and ( 's3' in r ) ) : continue
@@ -48,7 +53,11 @@ def lambda_handler(event, context):
         d['object_owner']   = r['userIdentity']['principalId']
         d['bucket_name']    = r['s3']['bucket']['name']
         d['key']            = r['s3']['object']['key']
-        resp['Items'].append(d)
+        resize_status = thumbnail_creator._resize_factory_assembly(d['key'], d['bucket_name'], des_bucket)
+        if resize_status:
+            resp['Items'].append(d)
+        else:
+            break
 
     if resp.get('Items'):
         resp['status'] = True
