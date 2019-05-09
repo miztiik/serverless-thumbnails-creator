@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
 Description: >
-  Receive an Amazon S3 event input[image], processes the image. i.e resizes the image in the source bucket and saves the output to the target bucket.
+  AWS Lambda to process an Amazon S3 event input image. Resizes the image in the source bucket and save the output to the target bucket.
 
 Parameters:
   debugMODE:
@@ -11,6 +11,7 @@ Parameters:
     Type: String
     AllowedValues: ["True", "False"]
     ConstraintDescription: Must be boolean.
+
   FunctionNameSuffix:
     Description: 'Suffix to append to the Lambda functions.'
     Type: 'String'
@@ -34,7 +35,11 @@ Resources:
       Description: 'AWS Lambda to process newly uploaded images and store in target bucket'
       FunctionName: !Sub 'EventProcessor${FunctionNameSuffix}'
       Handler: serverless-s3-event-processor.lambda_handler
-      CodeUri: ./src/*
+      CodeUri: ./src/serverless-image-resize-factory.zip
+      Environment:
+        Variables:
+          DESTINATION_BUCKET:
+            !Ref TgtBucket
       Events:
         EventTrigger1:
           Type: S3
@@ -43,17 +48,9 @@ Resources:
             Events: s3:ObjectCreated:*
       Policies: 
         - AWSLambdaExecute # Managed Policy
-        # - Version: '2012-10-17' # Policy Document
-        #   Statement:
-        #     - Effect: Allow
-        #       Action:
-        #         - s3:GetObject
-        #         - s3:GetObjectACL
-        #        Resource: !GetAtt SrcEventBucket.Arn
-
   SrcEventBucket:
     Type: AWS::S3::Bucket
-  TgtEventBucket:
+  TgtBucket:
     Type: AWS::S3::Bucket
 
 Outputs:
@@ -62,7 +59,7 @@ Outputs:
     Value: !Ref SrcEventBucket
   TgtS3Bucket:
     Description: Target S3 Bucket that triggers the Lambda
-    Value: !Ref TgtEventBucket
+    Value: !Ref TgtBucket
   EventProcessorFunction:
     Description: ARN for the EventProcessor Lambda Function
     Value: !GetAtt EventProcessor.Arn
