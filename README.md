@@ -1,8 +1,8 @@
-# AWS S3 Real Time Event Processor
+# Serverless Thumbnail Creator
 
-Lets say, we have to do some action for every object uploaded / added to S3 Bucket. We can use _DynamoDB Streams_ along with Lambda to achieve the same.
+Lets say, we have to create thumbnails, profile picture for the images uploaded by users. We can use S3 Event notification along with lambda function to do it.
 
-![AWS Serverless S3 Real Time Event Processor](images/miztiik-serverless-s3-event-processor.png)
+![AWS Serverless Thumbnail Creator](images/Miztiik-Serverless-Image-Processor.png)
 
 #### Follow this article in [Youtube](https://youtube.com/c/valaxytechnologies)
 
@@ -13,7 +13,7 @@ Lets say, we have to do some action for every object uploaded / added to S3 Buck
 1. ## Clone the repository
 
    ```sh
-   git clone https://github.com/miztiik/serverless-s3-event-processor.git
+   git clone https://github.com/miztiik/serverless-thumbnails-creator.git
    ```
 
 1. ## Customize the deployment
@@ -22,8 +22,9 @@ Lets say, we have to do some action for every object uploaded / added to S3 Buck
   
     ```sh
     AWS_PROFILE="default"
+    AWS_REGION="us-east-1"
     BUCKET_NAME="sam-templates-011" # bucket must exist in the SAME region the deployment is taking place
-    SERVICE_NAME="serverless-s3-event-processor"
+    SERVICE_NAME="serverless-thumbnails-creator"
     TEMPLATE_NAME="${SERVICE_NAME}.yaml"
     STACK_NAME="${SERVICE_NAME}"
     OUTPUT_DIR="./outputs/"
@@ -35,7 +36,7 @@ Lets say, we have to do some action for every object uploaded / added to S3 Buck
     We will use the `deploy.sh` in the `helper_scripts` directory to deploy our [AWS SAM](https://github.com/awslabs/serverless-application-model) template
 
     ```sh
-    chmod +x ./helper_scripts/deploy.sh
+    chmod +x ./helper_scripts/deploy*.sh
     ./helper_scripts/deploy.sh
     ```
   
@@ -52,10 +53,10 @@ Lets say, we have to do some action for every object uploaded / added to S3 Buck
       },
       "Items": [
         {
-          "time": "2019-05-08T18:51:00.097Z",
-          "object_owner": "AWS:AIDdR7KsQLWs56LRA",
-          "bucket_name": "serverless-s3-event-processor-eventbucket-novet8m933s4",
-          "key": "c19cf74b-ca14-4458-b2f1-c97b51789f67.xls"
+          "time": "2019-05-09T18:02:24.534Z",
+          "object_owner": "AWS:AIDAUR7KWXJQLWZZ56LRA",
+          "bucket_name": "serverless-thumbnails-creator-srceventbucket-zwpgvaxxb3qh",
+          "key": "wt-cloudtrail-100.png"
         }
       ]
     }
