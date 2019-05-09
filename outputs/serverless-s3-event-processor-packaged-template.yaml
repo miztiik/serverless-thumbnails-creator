@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'AWS Lambda to process new S3 Objects - For ex, Image Resizing, Object
+  Recognition, Insert to DynamoDB etc.
+
+  '
+Parameters:
+  debugMODE:
+    Description: Do you want to enable logging.
+    Default: 'False'
+    Type: String
+    AllowedValues:
+    - 'True'
+    - 'False'
+    ConstraintDescription: Must be boolean.
+  FunctionNameSuffix:
+    Description: Suffix to append to the Lambda functions.
+    Type: String
+    Default: ''
+Globals:
+  Function:
+    Runtime: python3.7
+    Timeout: 10
+    MemorySize: 128
+    Environment:
+      Variables:
+        DEBUG_MODE:
+          Ref: debugMODE
+Resources:
+  EventProcessor:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: AWS Lambda to process new S3 Objects - For ex, Image Resizing,
+        Object Recognition, Insert to DynamoDB etc.
+      FunctionName:
+        Fn::Sub: EventProcessor-${FunctionNameSuffix}
+      Handler: serverless-s3-event-processor.lambda_handler
+      CodeUri: s3://sam-templates-011/6f5a19f04118cfe0288ec971be3885da
+      Events:
+        EventTrigger1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: EventBucket
+            Events: s3:ObjectCreated:*
+      Policies:
+      - AWSLambdaExecute
+  EventBucket:
+    Type: AWS::S3::Bucket
+Outputs:
+  S3EventBucket:
+    Description: S3 Bucket that triggers the Lambda
+    Value:
+      Ref: EventBucket
+  EventProcessorFunction:
+    Description: ARN for the EventProcessor Lambda Function
+    Value:
+      Fn::GetAtt:
+      - EventProcessor
+      - Arn

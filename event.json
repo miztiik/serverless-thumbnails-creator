@@ -1,0 +1,38 @@
+{
+  "Records": [
+    {
+      "eventVersion": "2.1",
+      "eventSource": "aws:s3",
+      "awsRegion": "us-east-1",
+      "eventTime": "2019-05-08T11:26:43.409Z",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "AWS:AIDAS7KWXJQLWZZ56LRA"
+      },
+      "requestParameters": {
+        "sourceIPAddress": "192.168.231.254"
+      },
+      "responseElements": {
+        "x-amz-request-id": "ABE15378A2B533D8",
+        "x-amz-id-2": "WUxLZG6VAJ8uVdfdsN2xNORQQibvqrPUF/YGpMs+5ZP95mIrqMKY9CrSY9PjdNzZBRTkxXiBONY="
+      },
+      "s3": {
+        "s3SchemaVersion": "1.0",
+        "configurationId": "06485498-2a05-4b3f-b805-f7a5f6f715ec",
+        "bucket": {
+          "name": "serverless-s3-event-processor-eventbucket-fdfdcywtzw3w",
+          "ownerIdentity": {
+            "principalId": "AASDIVU7CZCZP24"
+          },
+          "arn": "arn:aws:s3:::serverless-s3-event-processor-eventbucket-fdfdcywtzw3w"
+        },
+        "object": {
+          "key": "test-object-mystique.py",
+          "size": 2007,
+          "eTag": "0572bc4f7cdf589370a4057b86d618da",
+          "sequencer": "005CD2BCF351A92592"
+        }
+      }
+    }
+  ]
+}
