@@ -4,6 +4,7 @@ set -e
 
 #----- Change these parameters to suit your environment -----#
 AWS_PROFILE="default"
+AWS_REGION="us-east-1"
 BUCKET_NAME="sam-templates-011" # bucket must exist in the SAME region the deployment is taking place
 SERVICE_NAME="serverless-thumbnails-creator"
 TEMPLATE_NAME="${SERVICE_NAME}.yaml"
@@ -22,7 +23,7 @@ function pack() {
 
     # Cleanup Output directory
     rm -rf "${OUTPUT_DIR}"*
-    echo -n "Stack Packaging Initiated"
+    echo -e "\n Stack Packaging Initiated \n"
     aws cloudformation package \
         --template-file "${TEMPLATE_NAME}" \
         --s3-bucket "${BUCKET_NAME}" \
@@ -32,21 +33,22 @@ function pack() {
 }
 # Deploy the stack
 function deploy() {
-    echo -n "Stack Deployment Initiated"
+    echo -e "\n Stack Deployment Initiated \n"
     aws cloudformation deploy \
         --profile "${AWS_PROFILE}" \
         --template-file "${PACKAGED_OUTPUT_TEMPLATE}" \
         --stack-name "${STACK_NAME}" \
         --tags Service="${SERVICE_NAME}" \
-        --capabilities CAPABILITY_IAM
+        --capabilities CAPABILITY_IAM \
+        --region "${AWS_REGION}"
         # --parameter-overrides \
         #    debugMODE="${debugMODE}" \
     exit
 }
 
 function nuke_stack() {
-        echo -n "Stack Deletion Initiated"
-		aws cloudformation delete-stack --stack-name "${STACK_NAME}"
+        echo -e "\n Stack Deletion Initiated \n"
+		aws cloudformation delete-stack --stack-name "${STACK_NAME}" --region "${AWS_REGION}"
         exit
 	}
 
