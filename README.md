@@ -18,7 +18,9 @@ Lets say, we have to create thumbnails, profile picture for the images uploaded 
 
 1. ## Customize the deployment
 
-    Edit the `./helper_scripts/deploy.sh` to update your environment variables. The expected output in cloudwatch logs should look like this,
+    In the `serverless-thumbnails-creator` directory, Edit the `./helper_scripts/deploy.sh` to update your environment variables.
+
+    **You will have to create an S3 bucket in your account and update the `BUCKET_NAME` in the below section**
   
     ```sh
     AWS_PROFILE="default"
@@ -30,6 +32,8 @@ Lets say, we have to create thumbnails, profile picture for the images uploaded 
     OUTPUT_DIR="./outputs/"
     PACKAGED_OUTPUT_TEMPLATE="${OUTPUT_DIR}${STACK_NAME}-packaged-template.yaml"
     ```
+
+    Save the file.
 
 1. ## Deployment
 
