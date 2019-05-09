@@ -14,8 +14,7 @@ import thumbnail_creator
 
 # Initialize Logger
 logger = logging.getLogger()
-# logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 def set_global_vars():
     global_vars = {'status': False}
