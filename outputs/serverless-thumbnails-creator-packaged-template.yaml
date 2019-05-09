@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: 'AWS Lambda to process new S3 Objects - For ex, Image Resizing, Object
-  Recognition, Insert to DynamoDB etc.
+Description: 'AWS Lambda to process an Amazon S3 event input image. Resizes the image
+  in the source bucket and save the output to the target bucket.
 
   '
 Parameters:
@@ -16,7 +16,7 @@ Parameters:
   FunctionNameSuffix:
     Description: Suffix to append to the Lambda functions.
     Type: String
-    Default: ''
+    Default: -Mystique
 Globals:
   Function:
     Runtime: python3.7
@@ -30,28 +30,38 @@ Resources:
   EventProcessor:
     Type: AWS::Serverless::Function
     Properties:
-      Description: AWS Lambda to process new S3 Objects - For ex, Image Resizing,
-        Object Recognition, Insert to DynamoDB etc.
+      Description: AWS Lambda to process newly uploaded images and store in target
+        bucket
       FunctionName:
-        Fn::Sub: EventProcessor-${FunctionNameSuffix}
+        Fn::Sub: EventProcessor${FunctionNameSuffix}
       Handler: serverless-s3-event-processor.lambda_handler
-      CodeUri: s3://sam-templates-011/6f5a19f04118cfe0288ec971be3885da
+      CodeUri: s3://sam-templates-011/5a919e92c2945e953e5ca4441824e7bd
+      Environment:
+        Variables:
+          DESTINATION_BUCKET:
+            Ref: TgtBucket
       Events:
         EventTrigger1:
           Type: S3
           Properties:
             Bucket:
-              Ref: EventBucket
+              Ref: SrcEventBucket
             Events: s3:ObjectCreated:*
       Policies:
       - AWSLambdaExecute
-  EventBucket:
+  SrcEventBucket:
+    Type: AWS::S3::Bucket
+  TgtBucket:
     Type: AWS::S3::Bucket
 Outputs:
-  S3EventBucket:
-    Description: S3 Bucket that triggers the Lambda
+  SrcS3Bucket:
+    Description: Source S3 Bucket that triggers the Lambda
     Value:
-      Ref: EventBucket
+      Ref: SrcEventBucket
+  TgtS3Bucket:
+    Description: Target S3 Bucket that triggers the Lambda
+    Value:
+      Ref: TgtBucket
   EventProcessorFunction:
     Description: ARN for the EventProcessor Lambda Function
     Value:
