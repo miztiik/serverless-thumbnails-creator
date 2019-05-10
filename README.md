@@ -46,7 +46,7 @@ Lets say, we have to create thumbnails, profile picture for the images uploaded 
   
 1. ## Test Event Processor
 
-    Upload an object to the S3 Bucket or use the `event.json` in the `src` directory to test the lambda function. In the lambda logs you will see the following output,
+    Upload an object to the `Source S3 Bucket` created by the stack. You will be able to see the output in the `Destination S3 Bucket` three directories with resized images. In the lambda logs you will see the following output
 
     ```json
     {
