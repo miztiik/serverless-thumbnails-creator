@@ -46,7 +46,7 @@ Lets say, we have to create thumbnails, profile picture for the images uploaded 
   
 1. ## Test Event Processor
 
-    Upload an object to the `Source S3 Bucket` created by the stack(_The bucket name should be something like `serverless-thumbnails-creator-srceventbucket-zwpgvaxxb3qh`_). You will be able to see the output in the `Destination S3 Bucket`(_In your account `*TgtBucket`_) three directories with resized images. In the lambda logs you will see the following output
+    Upload an object to the `Source S3 Bucket` created by the stack(_The bucket name should be something like `serverless-thumbnails-creator-srceventbucket-zwpgvaxxb3qh`_). You will be able to see the output in the `Destination S3 Bucket`(_In your account `*tgtbucket`_) three directories with resized images. In the lambda logs you will see the following output
 
     ```json
     {
